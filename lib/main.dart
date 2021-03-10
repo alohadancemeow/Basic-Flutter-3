@@ -5,8 +5,12 @@ import 'package:my_timeline_flutter_app/pages/second_page.dart';
 import 'package:my_timeline_flutter_app/provider/post_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 void main() {
+  //set timeago to thai.
+  timeago.setLocaleMessages("th", timeago.ThMessages());
+  timeago.setLocaleMessages("th_short", timeago.ThShortMessages());
   runApp(MyApp());
 }
 
@@ -92,7 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
             itemBuilder: (context, index) {
               //get data from post[index]
               var postData = value.post[index];
-              log(postData);
+              // log("$postData");
 
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,15 +107,17 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        //show timeago
                         Text(
-                          "10 min ago.",
+                          postData.timeAgo,
                           style: TextStyle(color: Colors.grey[600]),
                         ),
                         SizedBox(
                           height: 10,
                         ),
+                        //show messege
                         Text(
-                          postData,
+                          postData.message,
                           style: TextStyle(fontSize: 18),
                         )
                       ],
