@@ -2,6 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:my_timeline_flutter_app/pages/second_page.dart';
+import 'package:my_timeline_flutter_app/provider/post_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:provider/single_child_widget.dart';
 
 void main() {
   runApp(MyApp());
@@ -11,21 +14,32 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
+    //add MultiProvider ->
+    return MultiProvider(
+      //set up provder
+      providers: <SingleChildWidget>[
+        ChangeNotifierProvider(
+          create: (BuildContext context) {
+            return PostProvider();
+          },
+        )
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          // This is the theme of your application.
+          //
+          // Try running your application with "flutter run". You'll see the
+          // application has a blue toolbar. Then, without quitting the app, try
+          // changing the primarySwatch below to Colors.green and then invoke
+          // "hot reload" (press "r" in the console where you ran "flutter run",
+          // or simply save your changes to "hot reload" in a Flutter IDE).
+          // Notice that the counter didn't reset back to zero; the application
+          // is not restarted.
+          primarySwatch: Colors.blue,
+        ),
+        home: MyHomePage(title: 'Flutter : My Timeline'),
       ),
-      home: MyHomePage(title: 'Flutter : My Timeline'),
     );
   }
 }
@@ -68,40 +82,50 @@ class _MyHomePageState extends State<MyHomePage> {
           )
         ],
       ),
-      //ListView ->
-      body: ListView.builder(
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: EdgeInsets.all(10),
-                //Column ->
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "10 min ago.",
-                      style: TextStyle(color: Colors.grey[600]),
+      //ผูก provider - consumer ->
+      //รับข้อมูลจาก provider เข้ามาทำงาน
+      body: Consumer<PostProvider>(
+        builder: (BuildContext context, value, Widget child) {
+          //ListView ->
+          return ListView.builder(
+            itemCount: value.post.length,
+            itemBuilder: (context, index) {
+              //get data from post[index]
+              var postData = value.post[index];
+              log(postData);
+
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    //Column ->
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "10 min ago.",
+                          style: TextStyle(color: Colors.grey[600]),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          postData,
+                          style: TextStyle(fontSize: 18),
+                        )
+                      ],
                     ),
-                    SizedBox(
-                      height: 10,
+                  ),
+                  SizedBox(
+                    height: 10,
+                    child: Container(
+                      decoration: BoxDecoration(color: Colors.grey[350]),
                     ),
-                    Text(
-                      "Hello $index",
-                      style: TextStyle(fontSize: 18),
-                    )
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 10,
-                child: Container(
-                  decoration: BoxDecoration(color: Colors.grey[350]),
-                ),
-              )
-            ],
+                  )
+                ],
+              );
+            },
           );
         },
       ),
