@@ -1,3 +1,4 @@
+import 'package:sembast/sembast.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class Post {
@@ -19,5 +20,22 @@ class Post {
     var message = timeago.format(ago, locale: "th");
     // var message = timeago.format(ago, locale: "th_short");
     return message;
+  }
+
+  //convert to JSON
+  static Map<String, dynamic> toJson(Post post) {
+    return {
+      'message': post.message,
+      'createdDate': post.dateTimeCreated.toIso8601String()
+    };
+  }
+
+  //get data from recordSnapshot
+  static fromRecord(RecordSnapshot recordSnapshot) {
+    var post = Post(
+        message: recordSnapshot['message'],
+        dateTimeCreated: DateTime.parse(recordSnapshot['createdDate']));
+
+    return post;
   }
 }
