@@ -9,7 +9,7 @@ import 'package:sembast/sembast_io.dart';
 class PostDB {
   String databaseName;
 
-  PostDB({this.databaseName});
+  PostDB(this.databaseName);
 
   //open db.
   Future<Database> openDatabase() async {

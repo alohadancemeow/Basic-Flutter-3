@@ -1,18 +1,22 @@
 import 'package:flutter/foundation.dart';
 import 'package:my_timeline_flutter_app/database/post_db.dart';
+import 'package:my_timeline_flutter_app/database/post_db_sqlite.dart';
 import 'package:my_timeline_flutter_app/models/post_model.dart';
 
 class PostProvider with ChangeNotifier {
   //with = การกำหนดคุณสมบัติให้กับคลาส
 
+  PostDB _postDB;
   List<Post> _posts = [];
-
-  // List<String> get post {
-  //   return _posts;
-  // }
 
   //Fat arrow function.
   List<Post> get post => _posts;
+
+  PostProvider() {
+    //set database name
+    _postDB = PostDBSqlite('postDatabase');
+    // _postDB = PostDB('postDatabase');
+  }
 
   addNewPost(String postMessage) async {
     //add post to _post[]
@@ -23,12 +27,10 @@ class PostProvider with ChangeNotifier {
 
     //enter name of db,
     //then save post to db
-    var postDb = PostDB(databaseName: 'postDatabase');
-    await postDb.save(post);
+    await _postDB.save(post);
 
     //load all data
-    var postFromDB = await postDb.loadAllPosts();
-    // log("$postFromDB");
+    var postFromDB = await _postDB.loadAllPosts();
 
     //set post data to _post[] (consumer)
     _posts = postFromDB;
@@ -39,16 +41,13 @@ class PostProvider with ChangeNotifier {
 
   //load data when open app.
   initData() async {
-    //database reference
-    var postDB = PostDB(databaseName: 'postDatabase');
-    _posts = await postDB.loadAllPosts();
+    _posts = await _postDB.loadAllPosts();
     notifyListeners();
   }
 
   //clear posts
   clearAllPost() async {
-    var postDb = PostDB(databaseName: 'postDatabase');
-    await postDb.clearPostData();
+    await _postDB.clearPostData();
 
     //empty _post[]
     _posts = [];
