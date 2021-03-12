@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/foundation.dart';
 import 'package:my_timeline_flutter_app/database/post_db.dart';
 import 'package:my_timeline_flutter_app/models/post_model.dart';
@@ -44,6 +42,17 @@ class PostProvider with ChangeNotifier {
     //database reference
     var postDB = PostDB(databaseName: 'postDatabase');
     _posts = await postDB.loadAllPosts();
+    notifyListeners();
+  }
+
+  //clear posts
+  clearAllPost() async {
+    var postDb = PostDB(databaseName: 'postDatabase');
+    await postDb.clearPostData();
+
+    //empty _post[]
+    _posts = [];
+
     notifyListeners();
   }
 }

@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:my_timeline_flutter_app/models/post_model.dart';
@@ -73,5 +72,14 @@ class PostDB {
     }
 
     return postsList;
+  }
+
+  //Clear all data in store
+  Future<void> clearPostData() async {
+    var database = await this.openDatabase();
+    var postStore = intMapStoreFactory.store('posts');
+
+    //delete all data
+    await postStore.drop(database);
   }
 }

@@ -12,7 +12,7 @@ class Secondpage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("2nd Page"),
+        title: Text(" Post Page"),
       ),
       // Form ->
       body: Form(
