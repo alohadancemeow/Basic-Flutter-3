@@ -1,20 +1,24 @@
 import 'package:flutter/foundation.dart';
 import 'package:my_timeline_flutter_app/database/post_db.dart';
+import 'package:my_timeline_flutter_app/database/post_db_sqflite.dart';
 import 'package:my_timeline_flutter_app/database/post_db_sqlite.dart';
 import 'package:my_timeline_flutter_app/models/post_model.dart';
 
 class PostProvider with ChangeNotifier {
   //with = การกำหนดคุณสมบัติให้กับคลาส
 
-  PostDB _postDB;
   List<Post> _posts = [];
+
+  // ! Change database here.
+  // PostDB _postDB;  //use PostDB(NOSQL)
+  PostDBSqflite _postDB; //use PostDBSqflite(SQL)
 
   //Fat arrow function.
   List<Post> get post => _posts;
 
   PostProvider() {
     //set database name
-    _postDB = PostDBSqlite('postDatabase');
+    _postDB = PostDBSqflite(databaseName: 'posts');
     // _postDB = PostDB('postDatabase');
   }
 

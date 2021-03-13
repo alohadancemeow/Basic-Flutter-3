@@ -7,6 +7,8 @@ import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 
 class PostDB {
+  // ! NOSQL Database.
+
   String databaseName;
 
   PostDB(this.databaseName);

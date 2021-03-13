@@ -12,7 +12,7 @@ class PostDBSqlite extends PostDB {
 
   @override
   Future<Database> openDatabase() async {
-    //get path
+    //get user's path
     Directory appDocumentDirectory = await getApplicationDocumentsDirectory();
 
     //join path - database name
